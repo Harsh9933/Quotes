@@ -12,10 +12,12 @@ import com.example.quotesapp.model.Quotes
 import com.example.quotesapp.model.quotes
 import com.example.quotesapp.screens.quoteDetail
 import com.example.quotesapp.screens.quoteList
+import javax.inject.Inject
 
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+
     NavHost(navController = navController, startDestination = Screen.MainScreen.route ){
         composable(route = Screen.MainScreen.route){
             quoteList(quotes = quotes, navController = navController)

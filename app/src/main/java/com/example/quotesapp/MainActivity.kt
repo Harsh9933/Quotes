@@ -1,6 +1,7 @@
 package com.example.quotesapp
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -20,35 +21,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.quotesapp.api.QuoteApi
+import com.example.quotesapp.model.Quotes
 import com.example.quotesapp.model.quotes
 import com.example.quotesapp.navigation.Navigation
 import com.example.quotesapp.screens.quoteBox
 import com.example.quotesapp.screens.quoteDetail
 import com.example.quotesapp.screens.quoteList
 import com.example.quotesapp.ui.theme.QuotesAppTheme
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var quoteApi: QuoteApi
+
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        GlobalScope.launch {
+            var response = quoteApi.getQuotes()
+            Log.d("Harsh", response.body().toString())
+        }
         enableEdgeToEdge()
         setContent {
             QuotesAppTheme {
                 Navigation()
-//                Column(
-//                    horizontalAlignment = Alignment.CenterHorizontally
-//                ) {
-//                    Text(
-//                        text = "Quotes",
-//                        style = TextStyle(
-//                            fontSize = 30.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            fontFamily = FontFamily.Cursive
-//                        ),
-//                        modifier = Modifier.padding(30.dp)
-//                    )
-//                    quoteList(quotes = quotes)
-//                }
-//                quoteDetail(quotes = quotes[1])
             }
         }
     }
